@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.Dreamy.model.mapper.UserMapper">
+
+	<select id="login" parameterType="Map" resultType="Integer">
+		select count(*) 
+		from User
+		where email=#{email} and password=#{password}
+	</select>
+	
+	<!-- 소셜 로그인 관련 -->
+	<select id="setUser" parameterType="String" resultType="userDto">
+		select uid, email, name, phone, login_type as loginType, profile_url as profileUrl
+		from User
+		where email=#{email}
+	</select>
+
+	<select id="getLoginType" parameterType="String" resultType="String">
+		select login_type
+		from User
+		where email=#{email}
+	</select>
+	
+	<!-- 소셜 로그인 관련 -->
+	<insert id="signup" parameterType="Map">
+		insert into User (email, name, password, phone, profile_url, login_type)
+		values (#{email}, #{name}, #{password}, #{phone}, #{profileUrl}, #{loginType})
+	</insert>
+	
+	<!-- 회원가입 관련 -->
+	<select id="getEmail" parameterType="String" resultType="Integer">
+		select count(*) from User
+		where email = #{email}
+	</select>
+
+	<select id="getName" parameterType="String" resultType="Integer">
+		select count(*) from User
+		where name = #{name}
+	</select>
+	<!-- 회원가입 관련 -->
+	
+	<select id="confirm" parameterType="Map" resultType="Integer">
+		select count(*) from User
+		where uid=#{uid} and password=#{password}
+	</select>
+	
+	<update id="update" parameterType="Map">
+		update User set password=#{password}, phone=#{phone}
+		where uid=#{uid}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from User
+		where uid=#{uid}
+	</delete>
+
+	<!-- 비밀번호 변경 관련 -->
+	<select id="certification" parameterType="Map" resultType="Integer">
+		select count(*)
+		from User
+		where email = #{email} and name = #{name}
+	</select>
+	
+	<update id="updatePassword" parameterType="Map">
+		update User 
+		set	password=#{password} 
+		where email=#{email}
+	</update>
+	<!-- 비밀번호 변경 관련 -->
+	
+	<!-- 회원정보 조회 -->
+	<select id="userInfo" parameterType="Integer" resultType="userDto">
+		select uid, email, name, phone, profile_url as profileUrl, login_type as loginType
+		from User
+		where uid=#{uid}
+	</select>
+	
+	<!-- 이미지 업로드 -->
+	<update id="updateProfile" parameterType="Map">
+		update User
+		set profile_url=#{profileUrl}
+		where uid=#{uid}
+	</update>
+	
+</mapper>
